@@ -29,7 +29,18 @@ def main():
     queue, info = load()
     tweets = twitter.search(q="I can't believe", result_type="recent", since_id=info["sinceid"], count='100')
     info["sinceid"] = tweets["search_metadata"]["max_id"]
-    queue = queue + [tweet for tweet in tweets["statuses"] if not tweet["retweeted"] and not tweet.has_key("retweeted_status")]
+    triggers = ("Can't believe", "can't believe", "I can't believe")
+    print "make to add"
+    to_add = [tweet for tweet in tweets["statuses"] if not tweet["retweeted"] and not tweet.has_key("retweeted_status")]
+    print "append to add"
+    to_add = [tweet for tweet in to_add if tweet["text"].startswith(triggers) or tweet["text"].split(" ",1)[1].startswith(triggers)]
+    print "do awful things"
+    for tweet in to_add:
+        if tweet not in queue:
+            queue.append(tweet)
+    mx = max(len(to_add), 15)
+    if len(queue) > mx:
+        queue = queue[-mx:]
     if len(queue) > 0:
         respond(twitter, queue.pop())
     dump(queue, info)
