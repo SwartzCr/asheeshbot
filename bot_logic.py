@@ -32,6 +32,7 @@ def main():
     triggers = ("Can't believe", "can't believe", "I can't believe")
     to_add = [tweet for tweet in tweets["statuses"] if not tweet["retweeted"] and not tweet.has_key("retweeted_status")]
     to_add = [tweet for tweet in to_add if tweet["text"].startswith(triggers) or tweet["text"].split(" ",1)[1].startswith(triggers)]
+    queue = queue + to_add
     mx = max(len(to_add), 20)
     if len(queue) > mx:
         queue = queue[-mx:]
