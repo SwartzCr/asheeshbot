@@ -31,7 +31,7 @@ def main():
     print info
     tweets = twitter.search(q="I can't believe", result_type="recent", since_id=info["sinceid"], count='100')
     info["sinceid"] = tweets["search_metadata"]["max_id"]
-    queue = queue + [tweet for tweet in tweets["statuses"] if not tweet["retweeted"]]
+    queue = queue + [tweet for tweet in tweets["statuses"] if not tweet["retweeted"] and not tweet["retweeted_status"]]
     print queue
     if len(queue) > 0:
         respond(twitter, queue.pop())
